@@ -1,12 +1,9 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core_web/firebase_core_web.dart';
-import 'package:firebase_auth_web/firebase_auth_web.dart';
 class LoginPage extends StatefulWidget {
 
   @override

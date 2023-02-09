@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'reusable.dart';
 import 'constants.dart';
 import 'loginpage.dart';
@@ -16,15 +15,7 @@ class _Body1State extends State<Body1> {
     return SafeArea(
       child:
       Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            onTap: () {
 
-            },
-            decoration:searchBar.searchbar('Search for projects'),
-          ),
-        ),
         Center(child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
