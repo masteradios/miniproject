@@ -4,20 +4,21 @@ import 'package:miniproject/calendar.dart';
 import 'package:miniproject/lions.dart';
 import 'package:miniproject/messages.dart';
 import 'package:miniproject/register.dart';
+import 'package:miniproject/searchproject.dart';
+import 'chat.dart';
 import 'home.dart';
 import 'aboutpage.dart';
 import 'account.dart';
-import 'messages.dart';
-import 'calendar.dart';
+
 import 'loginpage.dart';
 import 'lions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'completed projects.dart';
 import 'userinfopage.dart';
 import 'pragatigrp.dart';
 import 'phoneverification.dart';
-import 'package:miniproject/homebody1.dart';
+
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -31,8 +32,9 @@ class Green extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/home',
+      initialRoute: '/register',
       routes: {
+        '/chat':(context)=>ChatScreen(),
         '/register':(context)=>RegisterPage(),
         '/home':(context)=>Home(),
         '/about':(context)=>About(),
@@ -47,6 +49,7 @@ class Green extends StatelessWidget {
         '/pragati':(context)=>Pragati(),
         '/personal':(context)=>PersonalData(),
         '/phone':(context)=>PhoneVerification(),
+        '/search':(context)=>Search()
       },
 
 

@@ -1,12 +1,11 @@
-import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:miniproject/firebase_services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'constants.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:firebase_core_web/firebase_core_web.dart';
-import 'package:firebase_auth_web/firebase_auth_web.dart';
+
 
 class RegisterPage extends StatefulWidget {
 
@@ -15,11 +14,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  CollectionReference userRef=FirebaseFirestore.instance.collection('users');
   SearchBar searchBar=SearchBar();
   bool hidetext=true;
   String text;
   String email;
   String password;
+  String name;
   bool showspinner=false;
   final _auth= FirebaseAuth.instance;
   @override
@@ -40,6 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Column(
                     children: [
                       Container(
+                        margin: EdgeInsets.only(bottom: 4),
                           width: MediaQuery.of(context).size.height/6,
                           child: Image(image: AssetImage('asssets/green.png'),fit: BoxFit.contain,),),
                       Padding(
@@ -48,8 +50,30 @@ class _RegisterPageState extends State<RegisterPage> {
                           keyboardType: TextInputType.emailAddress,
                           onChanged: (value)
                           {
-                              email=value;
-                              print(email);
+                              name=value;
+                          },
+                          decoration: InputDecoration(
+                            labelStyle: TextStyle(fontSize: 15.0,color: Colors.black,fontWeight: FontWeight.bold),
+                            hintText: 'Enter Your username',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(width: 2, color: Colors.grey),
+                            ),
+                            focusedBorder: (OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(width: 2, color: Colors.lightBlue),
+                            )),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TextField(
+                          keyboardType: TextInputType.emailAddress,
+                          onChanged: (value)
+                          {
+                            email=value;
+                            print(email);
                           },
                           decoration: InputDecoration(
                             labelStyle: TextStyle(fontSize: 15.0,color: Colors.black,fontWeight: FontWeight.bold),
@@ -114,11 +138,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       final newuser=await _auth.createUserWithEmailAndPassword(email: email, password: password);
                       if(newuser!=null)
                       {
+                       Database database= Database(email);
+                       await database.adduserdetails(name);
                         Navigator.pushReplacementNamed(context, '/home');
 
                       }
 
-                    }catch(e) {
+                    }on FirebaseAuthException catch (e) {
                      print(e);
                     }
                     setState(() {

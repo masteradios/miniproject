@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:miniproject/chat.dart';
 import 'package:miniproject/homebody1.dart';
+import 'package:miniproject/messages.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'reusable.dart';
 import 'constants.dart';
-import 'loginpage.dart';
 class Home extends StatefulWidget {
 
   @override
@@ -12,6 +13,28 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  @override
+  FirebaseAuth _auth=FirebaseAuth.instance;
+  User loggeduser;
+  String username='adiii';
+  void getcurrentuser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggeduser = user;
+
+        print('on home page');
+      }
+    } catch (e)
+    {
+
+    }
+  }
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getcurrentuser();
+  }
   int _index=0;
 
   HomeState();
@@ -33,11 +56,12 @@ class HomeState extends State<Home> {
 final tabs=
 [
   Body1(),
-  Text('hi'),
+ ChatScreen(),
   Text('hi again'),
 
 ];
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -48,24 +72,15 @@ final tabs=
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
 
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: AssetImage('asssets/aditya.jpeg'),
-                  ),
-                  SizedBox(width: 10.0,),
-                  Text('Welcome,User!',
-                    style:
-                    TextStyle
-                      (
-                      fontWeight: FontWeight.w900,
-                      fontSize: 30.0,
-                    ),),
-                ],
-              ),
+            const Padding(
+              padding: EdgeInsets.only(top: 15.0),
+              child: ListTile
+                (
+                leading: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: AssetImage('asssets/aditya.jpeg'),
+                ),
+              )
 
             ),
             SizedBox(height: 10.0,),
@@ -105,6 +120,13 @@ final tabs=
         ),
       ),
       appBar: AppBar(
+        actions: [
+          GestureDetector(onTap: ()
+          {
+
+            Navigator.pushNamed(context, '/search');
+          }, child: Icon(Icons.search_rounded,color: Colors.black,size: 30,))
+        ],
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.greenAccent,
         title: Text(
