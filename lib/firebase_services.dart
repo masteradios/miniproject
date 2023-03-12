@@ -12,7 +12,7 @@ class Database
     {userRef.doc(email).set(
         {
           'username':username,
-          'email':email
+          'email':email,
         });
 
     }
@@ -20,9 +20,23 @@ class Database
 
   }
 
-  Future getuserNamebyid() async {
+  void addmembers(String projectname) async
+  {
+    DocumentReference userRef=FirebaseFirestore.instance.collection('users').doc(email);
+    DocumentReference groupRef=FirebaseFirestore.instance.collection('projects').doc(projectname);
+    await groupRef.update(
+        {
+          'members':FieldValue.arrayUnion(['${email}']),
+        });
+
+     await userRef.update(
+        {
+          'groups':FieldValue.arrayUnion(['${projectname}_${email}'])
+        });
+  }
+
+  Future<String> getuserNamebyid() async {
     DocumentSnapshot doc=await userRef.doc(email).get();
-    print('hiiiiiiiiiiiiiiiiiiiiii+no'+doc.data().toString());
     print('heloooooooooooooo'+doc['username']);
     return doc['username'];
 

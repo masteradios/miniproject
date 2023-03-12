@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:miniproject/chat.dart';
+import 'package:miniproject/firebase_services.dart';
+import 'package:miniproject/groups.dart';
 import 'package:miniproject/homebody1.dart';
 import 'package:miniproject/messages.dart';
+import 'package:miniproject/searchproject.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'constants.dart';
 class Home extends StatefulWidget {
@@ -15,30 +19,19 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   @override
   FirebaseAuth _auth=FirebaseAuth.instance;
+  Database database=Database(FirebaseAuth.instance.currentUser.email);
   User loggeduser;
-  String username='adiii';
-  void getcurrentuser() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggeduser = user;
+  String username='';
 
-        print('on home page');
-      }
-    } catch (e)
-    {
-
-    }
-  }
   void initState() {
     // TODO: implement initState
     super.initState();
     getcurrentuser();
+    getuserNamebyid();
+
   }
   int _index=0;
-
   HomeState();
-
   alertmethod()
   {
     Alert(
@@ -56,12 +49,33 @@ class HomeState extends State<Home> {
 final tabs=
 [
   Body1(),
- ChatScreen(),
+  GroupList(),
   Text('hi again'),
 
 ];
   @override
+  void getcurrentuser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggeduser = user;
 
+        print('on home page');
+      }
+    } catch (e)
+    {
+
+    }
+  }
+  void getuserNamebyid() async {
+    DocumentSnapshot doc=await database.userRef.doc(loggeduser.email).get();
+    print('heloooooooooooooo'+doc['username']);
+
+    setState(() {
+      username=  doc['username'];
+    });
+
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -71,32 +85,27 @@ final tabs=
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-
-            const Padding(
+             Padding(
               padding: EdgeInsets.only(top: 15.0),
               child: ListTile
                 (
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: AssetImage('asssets/aditya.jpeg'),
+                subtitle: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Center(child: Text(username,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.left,)),
                 ),
+                title: Icon(Icons.account_circle,size: 100,),
               )
 
             ),
             SizedBox(height: 10.0,),
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Column(
-                    children: [
-                      DrawerContent('Account', Icons.account_circle, '/account'),
-                      DrawerContent('About Us', Icons.info, '/about'),
-                    ],
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(
+                  children: [
+                    DrawerContent('Account', Icons.account_circle, '/account'),
+                    DrawerContent('About Us', Icons.info, '/about'),
+                  ],
                 ),
               ),
             ),
@@ -175,24 +184,16 @@ class DrawerContent extends StatelessWidget {
   final String route;
   @override
   Widget build(BuildContext context) {
-    return     Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(title,style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold),),
-        ),
-        SizedBox(width: 10.0,),
-        GestureDetector(onTap: ()
+    return GestureDetector(
+        onTap: ()
         {
           Navigator.pushNamed(context, route);
         },
-          child: Icon(icon,size: 30.0,),
-
-        ),
-
-      ],
-    );
+        child: ListTile
+      (
+      leading: Text(title,style: TextStyle(fontSize: 30,color: Colors.greenAccent),),
+      trailing: Icon(icon,size: 30,color: Colors.black38,),
+    ));
   }
 }
 

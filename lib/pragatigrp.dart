@@ -1,37 +1,42 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:miniproject/firebase_services.dart';
 
 import 'constants.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'reusable.dart';
+
 class Pragati extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
-    alertmethod()
-    {
+    alertmethod() {
       Alert(
-          context:context,
+          context: context,
           title: 'Donation Succsesful!!',
           image: Image.asset('asssets/check.png'),
           buttons: [
-            DialogButton(child: Text('Go Back'), onPressed: (){Navigator.pop(context);})
-          ]
-      ).show();
-
+            DialogButton(
+                child: Text('Go Back'),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ]).show();
     }
-    alertmethodvolunteer()
-    {
+
+    alertmethodvolunteer() {
       Alert(
-          context:context,
+          context: context,
           title: 'Volunteering Succsesful!!',
           image: Image.asset('asssets/check.png'),
           buttons: [
-            DialogButton(child: Text('Go Back'), onPressed: (){Navigator.pop(context);})
-          ]
-      ).show();
-
+            DialogButton(
+                child: Text('Go Back'),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ]).show();
     }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -44,25 +49,52 @@ class Pragati extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child:ListView(
+            child: ListView(
               scrollDirection: Axis.vertical,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ReusableCard('Pragati Group', AssetImage('asssets/plant3.jpg'), 'Make Delhi Green!!', '/ashwa'),
+                  child: ReusableCard(
+                      'Pragati Group',
+                      AssetImage('asssets/plant3.jpg'),
+                      'Make Delhi Green!!',
+                      '/ashwa'),
                 ),
-                ProjectInfo('Pragati Group','Delhi','We aim at planting 100 Mango saplings in a period of 1.5 months.We sincerely request you to donate money or volunteer for this noble cause.Even a single penny is welcomed.','Leone Club transforms your gifts into service projects that change lives both close to home and around the world.','1) Planting a tree helps in improving air quality by filtering harmful dust and pollutants\n\n2) Work with small-holder farmers to create sustainable Agroforests\n\n3) Protect homes of various bieds,insects and animals ','28 November 2022'),
+                ProjectInfo(
+                    'Pragati Group',
+                    'Delhi',
+                    'We aim at planting 100 Mango saplings in a period of 1.5 months.We sincerely request you to donate money or volunteer for this noble cause.Even a single penny is welcomed.',
+                    'Leone Club transforms your gifts into service projects that change lives both close to home and around the world.',
+                    '1) Planting a tree helps in improving air quality by filtering harmful dust and pollutants\n\n2) Work with small-holder farmers to create sustainable Agroforests\n\n3) Protect homes of various bieds,insects and animals ',
+                    '28 November 2022'),
               ],
-            ) ,
+            ),
           ),
-          TextButton(onPressed: (){alertmethod();}, child: Impact('Donate'),),
-          Text('OR',style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),),
-          TextButton(onPressed: (){alertmethodvolunteer();}, child: Impact('Volunteer'),),
+          TextButton(
+            onPressed: () {
+              alertmethod();
+            },
+            child: Impact('Donate'),
+          ),
+          Text(
+            'OR',
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          TextButton(
+            onPressed: () {
+              User loggeduser=FirebaseAuth.instance.currentUser;
+              Database _database=Database(loggeduser.email);
+              _database.addmembers('pragati');
+              alertmethodvolunteer();
+            },
+            child: Impact('Volunteer'),
+          ),
         ],
       ),
     );
   }
 }
+
 class Impact extends StatelessWidget {
   Impact(this.title);
   final String title;
@@ -79,23 +111,20 @@ class Impact extends StatelessWidget {
         child: Center(
           child: Align(
             alignment: Alignment.center,
-            child: Text(title,style: TextStyle(
-              fontSize: 30.0,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-
-            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
       ),
-
-
     );
   }
 }
-
-
 
 // GridView(
 // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

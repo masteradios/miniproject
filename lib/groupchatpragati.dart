@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen2 extends StatefulWidget {
 
   static String name;
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<ChatScreen2> createState() => _ChatScreen2State();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreen2State extends State<ChatScreen2> {
   final _firebasefirestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   User loggeduser;
@@ -73,10 +73,10 @@ class _ChatScreenState extends State<ChatScreen> {
       body:
       Container(
         child: Column(
-          
+
           children:<Widget> [
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(stream: _firebasefirestore.collection('messages').orderBy('createdAt',descending: true).snapshots(),
+              child: StreamBuilder<QuerySnapshot>(stream: _firebasefirestore.collection('projects').doc('pragati').collection('messages').orderBy('createdAt',descending: true).snapshots(),
                 builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshot)
                 {
 
@@ -141,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: IconButton(
                     onPressed: message.trim().isEmpty?null:() {
                       messagecontroller.clear();
-                      _firebasefirestore.collection('messages').add(
+                      _firebasefirestore.collection('projects').doc('pragati').collection('messages').add(
                           {'text':message,
                             'sender':loggeduser.email,
                             'createdAt': Timestamp.now(),

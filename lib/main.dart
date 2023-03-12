@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:miniproject/ashwa.dart';
 import 'package:miniproject/calendar.dart';
+import 'package:miniproject/imageinput.dart';
 import 'package:miniproject/lions.dart';
 import 'package:miniproject/messages.dart';
 import 'package:miniproject/register.dart';
 import 'package:miniproject/searchproject.dart';
+import 'package:miniproject/welcome.dart';
 import 'chat.dart';
+import 'groupchat.dart';
+import 'groupchatpragati.dart';
 import 'home.dart';
 import 'aboutpage.dart';
 import 'account.dart';
-
 import 'loginpage.dart';
 import 'lions.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'completed projects.dart';
-import 'userinfopage.dart';
 import 'pragatigrp.dart';
 import 'phoneverification.dart';
 
@@ -32,9 +33,12 @@ class Green extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/register',
+      initialRoute: '/welcome',
       routes: {
-        '/chat':(context)=>ChatScreen(),
+        '/welcome':(context)=>Welcome(),
+        '/imageinput':(context)=>ImageInput(),
+        '/chats':(context)=>ChatScreen1(),
+        '/chatspragati':(context)=>ChatScreen2(),
         '/register':(context)=>RegisterPage(),
         '/home':(context)=>Home(),
         '/about':(context)=>About(),
@@ -47,7 +51,6 @@ class Green extends StatelessWidget {
         '/notfound':(context)=>Messages(),
         '/complete':(context)=>CompletedProjects(),
         '/pragati':(context)=>Pragati(),
-        '/personal':(context)=>PersonalData(),
         '/phone':(context)=>PhoneVerification(),
         '/search':(context)=>Search()
       },
